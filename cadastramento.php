@@ -52,11 +52,11 @@ $resposta = array();
 
 // Verificar se o formulário foi submetido
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $nome = $_POST["nome"];
-    $cpf = $_POST["cpf"];
-    $email = $_POST["email"];
-    $telefone = $_POST["phone"];
-    $dataNasc = $_POST["d_nasc"];
+    $nome = trim($_POST["nome"]);
+    $cpf = trim($_POST["cpf"]);
+    $email = trim($_POST["email"]);
+    $telefone = trim($_POST["phone"]);
+    $dataNasc = trim($_POST["d_nasc"]);
 
 
     // Validar CPF, email e telefone
