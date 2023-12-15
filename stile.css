@@ -1,0 +1,60 @@
+.letra{
+    color: #6B4950;
+}
+
+.cads {
+    background-color:rgb(255, 253, 252);
+    text-align: center;
+    padding: 20px;
+    border-style: none;
+    color: #6B4950;
+    text-shadow: 2px 2px 5px #d60d35;
+    border-radius: 20px;
+  }
+
+.form{
+    border: 2px solid;
+    border-style: outset;
+    border-collapse: collapse;
+    margin: auto;
+    width: 50%;
+    border: 1px solid;
+    padding: 10px;  
+    border-radius: 5px;
+    border-color: #6B4950;
+}
+
+
+.form2{
+    border: 2px solid;
+    border-style: outset;
+    padding: 10px;
+    text-align: center;
+    border: 1px solid;
+    width: 39%;
+    border-radius: 5px;
+    border-color: #6B4950;
+}
+
+.tabela{
+    background-color:#FFFFFF;
+    border-style: dotted;
+    border-color:  #6B4950;
+    width: 80%;
+    border-radius: 20px;
+}
+
+body {
+    background-color: #6B4950;
+  }
+
+  .botao{
+    background-color: #b95656;
+    border-color: #6B4950;
+    color: #ffffff;
+    border-radius: 2px;
+  right: 100px;
+  width: 100px;
+  height: 30px;
+
+  }
