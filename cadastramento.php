@@ -1,37 +1,32 @@
 <?php
 
-function validarCPF($cpf) {
-    // Remover caracteres não numéricos
-    $cpf = preg_replace('/[^0-9]/', '', $cpf);
-
-    // Verificar se o CPF tem 11 dígitos
+function validaCPF($cpf) {
+ 
+    // Extrai somente os números
+    $cpf = preg_replace( '/[^0-9]/is', '', $cpf );
+     
+    // Verifica se foi informado todos os digitos corretamente
     if (strlen($cpf) != 11) {
         return false;
     }
 
-    // Verificar se todos os dígitos são iguais
+    // Verifica se foi informada uma sequência de digitos repetidos. Ex: 111.111.111-11
     if (preg_match('/(\d)\1{10}/', $cpf)) {
         return false;
     }
 
-    // Calcular os dígitos verificadores
-    for ($i = 9, $j = 10, $soma1 = $soma2 = 0; $i > 0; $i--, $j--) {
-        $soma1 += $cpf[$i - 1] * $i;
-        $soma2 += $cpf[$i - 1] * $j;
+    // Faz o calculo para validar o CPF
+    for ($t = 9; $t < 11; $t++) {
+        for ($d = 0, $c = 0; $c < $t; $c++) {
+            $d += $cpf[$c] * (($t + 1) - $c);
+        }
+        $d = ((10 * $d) % 11) % 10;
+        if ($cpf[$c] != $d) {
+            return false;
+        }
     }
-
-    $resto1 = $soma1 % 11;
-    $dv1 = ($resto1 < 2) ? 0 : 11 - $resto1;
-
-    $resto2 = $soma2 % 11;
-    $dv2 = ($resto2 < 2) ? 0 : 11 - $resto2;
-
-    // Verificar se os dígitos verificadores estão corretos
-    if ($cpf[9] != $dv1 || $cpf[10] != $dv2) {
-        return false;
-    }
-
     return true;
+
 }
 
 function validarEmail($email) {
