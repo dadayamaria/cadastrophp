@@ -45,6 +45,11 @@ function validarTelefone($telefone) {
     return true;
 }
 
+require_once('bd.php');
+
+// array de resposta
+$resposta = array();
+
 // Verificar se o formulário foi submetido
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $nome = $_POST["nome"];
@@ -56,21 +61,63 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     // Validar CPF, email e telefone
     if (validarCPF($cpf) && validarEmail($email) && validarTelefone($telefone)) {
-        // TODO: Conectar ao banco de dados e inserir os dados
-        echo "Cadastro bem-sucedido!";
-    } else {
+       // antes de registrar o novo usuário, verificamos se ele já
+	    // não existe.
+	    $consulta_usuario_existe = $db_con->prepare("SELECT email FROM cadastro WHERE email='$email'");
+	    $consulta_usuario_existe->execute();
+	    if ($consulta_usuario_existe->rowCount() > 0) { 
+		    // se já existe um usuario para login
+		    // indicamos que a operação não teve sucesso e o motivo
+		    // no campo de erro.
+		    $resposta["sucesso"] = 0;
+		    $resposta["erro"] = "usuario ja cadastrado";
+	    }
+	    else {
+		    // se o usuário ainda não existe, inserimos ele no bd.
+		    $consulta = $db_con->prepare("INSERT INTO cadastro(nome,telefone,cpf,data_nasc,email) VALUES('$nome', '$telefone', '$cpf', ' $dataNasc', '$email')");
+	 
+		    if ($consulta->execute()) {
+			    // se a consulta deu certo, indicamos sucesso na operação.
+			    $resposta["sucesso"] = 1;
+		    }
+		    else {
+			    // se houve erro na consulta, indicamos que não houve sucesso
+			    // na operação e o motivo no campo de erro.
+			    $resposta["sucesso"] = 0;
+			    $resposta["erro"] = "erro BD: " . $consulta->error;
+		    }
+	    }
+    } 
+    else {
         if(!validarCPF($cpf)) {
-            echo "Falha na validação do cpf. Por favor, verifique os dados e tente novamente.";
+            $resposta["sucesso"] = 0;
+		    $resposta["erro"] = "Falha na validação do cpf. Por favor, verifique os dados e tente novamente.";
         }
-        if(!validarEmail($email)) {
-            echo "Falha na validação do email. Por favor, verifique os dados e tente novamente.";
-        }
-        if(!validarTelefone($telefone)) {
-            echo "Falha na validação do telefone. Por favor, verifique os dados e tente novamente.";
-        }
+        else {
+            if(!validarEmail($email)) {
+                $resposta["sucesso"] = 0;
+                $resposta["erro"] = "Falha na validação do email. Por favor, verifique os dados e tente novamente.";
+            }
+            else {
+                $resposta["sucesso"] = 0;
+                $resposta["erro"] = "Falha na validação do telefone. Por favor, verifique os dados e tente novamente.";
+            }
             
+        }   
     }
 }
+else {
+    $resposta["sucesso"] = 0;
+	$resposta["erro"] = "Método não é POST";
+}
+
+
+// A conexão com o bd sempre tem que ser fechada
+$db_con = null;
+
+// converte o array de resposta em uma string no formato JSON e 
+// imprime na tela.
+echo json_encode($resposta);
 
 ?>
 
