@@ -58,12 +58,22 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $telefone = $_POST["phone"];
     $dataNasc = $_POST["d_nasc"];
 
+
     // Validar CPF, email e telefone
     if (validarCPF($cpf) && validarEmail($email) && validarTelefone($telefone)) {
         // TODO: Conectar ao banco de dados e inserir os dados
         echo "Cadastro bem-sucedido!";
     } else {
-        echo "Falha na validação. Por favor, verifique os dados e tente novamente.";
+        if(!validarCPF($cpf)) {
+            echo "Falha na validação do cpf. Por favor, verifique os dados e tente novamente.";
+        }
+        if(!validarEmail($email)) {
+            echo "Falha na validação do email. Por favor, verifique os dados e tente novamente.";
+        }
+        if(!validarTelefone($telefone)) {
+            echo "Falha na validação do telefone. Por favor, verifique os dados e tente novamente.";
+        }
+            
     }
 }
 
