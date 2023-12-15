@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="stile.css">
+    <script src="funcionalidades.js"></script>
     <title>Cadastro de clientes</title> 
 </head>
 <body> 
